@@ -56,3 +56,4 @@ class Quiz {
     return totalDifficulty / this.questions.length;
   }
 }
+
