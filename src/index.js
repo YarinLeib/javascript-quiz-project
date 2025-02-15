@@ -71,7 +71,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
   /************  TIMER  ************/
 
-  let timer;
+  let timer = setInterval(() => {
+    if(quiz.timeRemaining > 0){
+quiz.timeRemaining--;
+timeRemainingContainer.innerText =
+`${Math.floor(quiz.timeRemaining / 60).toString().padStart(2, "0")}:` + 
+`${(quiz.timeRemaining % 60).toString().padStart(2, "0")}`;
+}else{
+  clearInterval(timer);
+  quizView.style.display = "none";
+  endView.style.display = "flex";
+  resultContainer.innerText = `Time's up! Your score: ${quiz.correctAnswers}`;
+}
+  }, 1000);
+  
+  
+
 
   /************  EVENT LISTENERS  ************/
 
@@ -190,7 +205,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function showResults() {
     // YOUR CODE HERE:
-    //
+    clearInterval(timer)
     // 1. Hide the quiz view (div#quizView)
     quizView.style.display = "none";
 
@@ -199,14 +214,38 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // 3. Update the result container (div#result) inner text to show the number of correct answers out of total questions
     resultContainer.innerText = `You scored ${quiz.correctAnswers} out of ${quiz.questions.length} correct answers!`; // This value is hardcoded as a placeholder
+
+    
   }
 
   function resetQuiz() {
+    
     endView.style.display = "none";
     quizView.style.display = "flex";
     quiz.currentQuestionIndex = 0;
     quiz.correctAnswers = 0;
+    quiz.timeRemaining = quizDuration
     quiz.shuffleQuestions();
+    
+    timeRemainingContainer.innerText =
+    `${Math.floor(quiz.timeRemaining / 60).toString().padStart(2, "0")}:` + 
+    `${(quiz.timeRemaining % 60).toString().padStart(2, "0")}`;
+
+
+    timer = setInterval(() => {
+      if(quiz.timeRemaining > 0){
+  quiz.timeRemaining--;
+  timeRemainingContainer.innerText =
+  `${Math.floor(quiz.timeRemaining / 60).toString().padStart(2, "0")}:` + 
+  `${(quiz.timeRemaining % 60).toString().padStart(2, "0")}`;
+  }else{
+    clearInterval(timer);
+    quizView.style.display = "none";
+    endView.style.display = "flex";
+    resultContainer.innerText = `Time's up! Your score: ${quiz.correctAnswers}`;
+  }
+    }, 1000);
     showQuestion();
   }
+
 });
